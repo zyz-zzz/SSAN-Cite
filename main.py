@@ -35,8 +35,10 @@ parser.add_argument('--nepoch', type=int, default=3000, help='Epoch amount')
 parser.add_argument('--partition', type=int, default=20, help='Number of partition')
 parser.add_argument('--prototype', type=str, default='three', choices=['two', 'three'],
                     help='how many prototypes used for domain and general alignment loss')
+# layer -> choose model
 parser.add_argument('--layer', type=str, default='double', choices=['single', 'double'],
                     help='Structure of the projector network, single layer or double layers projector')
+# output same feature (source and target domain)
 parser.add_argument('--d_common', type=int, default=256, help='Dimension of the common representation')
 parser.add_argument('--optimizer', type=str, default='mSGD', choices=['SGD', 'mSGD', 'Adam'], help='optimizer options')
 parser.add_argument('--lr', type=float, default=0.1, help='Learning rate')
@@ -107,8 +109,11 @@ def train(model, model_d, optimizer, optimizer_d, configuration):
 
         # prepare data
         source_data = configuration['source_data']
+        # l -> labeled
         l_target_data = configuration['labeled_target_data']
+        # u -> unlabeled
         u_target_data = configuration['unlabeled_target_data']
+        # which one product feature?
         source_feature, source_label = source_data[0].float(), source_data[1].reshape(-1, ).long()
         l_target_feature, l_target_label = l_target_data[0].float(), l_target_data[1].reshape(-1, ).long()
         u_target_feature = u_target_data[0].float()
@@ -121,6 +126,7 @@ def train(model, model_d, optimizer, optimizer_d, configuration):
         source_output, source_learned_feature = model(input_feature=source_feature)
         l_target_output, l_target_learned_feature = model(input_feature=l_target_feature)
         u_target_output, u_target_learned_feature = model(input_feature=u_target_feature)
+        # ?
         _, u_target_pseudo_label = torch.max(u_target_output, 1)
         if args.combine_pred == 'None':
             u_target_selected_feature = u_target_learned_feature

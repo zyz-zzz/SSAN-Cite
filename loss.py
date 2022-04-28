@@ -126,6 +126,7 @@ def knowledge_distillation_loss_func(source_predic, source_label, l_target_predi
     l_target_softmax = F.softmax(l_target_predic)
     soft_loss = 0
 
+    # another version
     for k in range(class_num):
         k_source_softmax = source_softmax.index_select(dim=0, index=(source_label == k).nonzero().reshape(-1, ))
         k_categories[k] = torch.mean(k_source_softmax, dim=0)

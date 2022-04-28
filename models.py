@@ -115,6 +115,7 @@ class Prototypical(nn.Module):
             feature = self.projector_target(input_feature)
         else:
             raise Exception("Input data wrong dimension! ")
+        # feature.shape = [ , d_common]
         feature = feature.view(-1, self.d_common)
         classifier_output = self.classifier(feature)
         return classifier_output, feature

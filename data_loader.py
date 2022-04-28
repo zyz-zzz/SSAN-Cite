@@ -51,6 +51,7 @@ def get_configuration(args):
         labeled_amount = 3
 
     xs = source['features']
+    # data normalize
     xs = preprocessing.normalize(xs, norm='l2')
     xs_label = source['labels'] - 1  # Label range: 0 - 9 both inclusive
     print('xs.shape = ', xs.shape)
@@ -64,6 +65,7 @@ def get_configuration(args):
     print('xt_label.shape = ', entire_t_label.shape)
     print('xt_label.len = ', len(entire_t_label))
 
+    # assert True
     assert len(np.unique(xs_label)) == len(np.unique(entire_t_label))
     class_number = len(np.unique(xs_label))  # number of classes
 
